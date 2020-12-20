@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+import 'anaSayfa.dart';
+import 'uyeOl.dart';
+import 'sifremiUnuttum.dart';
+
+void main() {
+  runApp(giris_sayfasi());
+}
+
+class giris_sayfasi extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: <String, WidgetBuilder>{
+        "/uyeOl": (context) => uyeOl(),
+        "/anaSayfa": (context) => anaSayfa(),
+        "/sifremiUnuttum": (context) => sifremiUnuttum(),
+      },
+      home: new loginPage(),
+    );
+  }
+}
+
+class loginPage extends StatefulWidget {
+  @override
+  _loginPageState createState() => _loginPageState();
+}
+
+class _loginPageState extends State<loginPage> {
+  String kullanici_adi;
+  String parola;
+  final _degeranahtar = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        body: Form(
+          key: _degeranahtar,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(),
+                    labelText: "Kullanıcı Adı",
+                  ),
+                  onSaved: (value) {
+                    kullanici_adi = value;
+                  },
+                  ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Parola",
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(),
+                  ),
+                  onSaved: (value) {
+                    parola = value;
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MaterialButton(
+                      child: Text("Şifremi Hatırlat"),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/sifremiUnuttum");
+                      },
+                    ),
+                    MaterialButton(
+                      child: Text("Üye Ol"),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/uyeOl");
+                      },
+                    ),
+                    RaisedButton(
+                        onPressed: () {
+                        _degeranahtar.currentState.save();
+                        if (kullanici_adi == "demo" && parola == "demo") {
+                          //debugPrint("Başarılı bir giriş yapıldı");
+                          Navigator.pushNamed(context, "/anaSayfa");
+                        } else {
+                          debugPrint("Kullanıcı adı VEYA şifre hatalı");
+                        }
+                      },
+                      child: Text("Giriş Yap"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
